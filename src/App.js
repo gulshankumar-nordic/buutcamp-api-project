@@ -32,12 +32,13 @@ class App extends Component {
       data: [],
       name:'',
       address:'',
-      kohdet:{},
+      kohdet:[],
       zoom: 1,
       zoomOffset: 1,
       hasLocation: false,
       setLongitude:'',
-      setLatitude:''
+      setLatitude:'',
+      
     };
 
     this.onNameChange = this.onNameChange.bind(this);
@@ -45,6 +46,7 @@ class App extends Component {
     this.onValueSubmit = this.onValueSubmit.bind(this);
     this.searchFormSubmit = this.searchFormSubmit.bind(this);
   }
+
 
   componentDidMount(){
     
@@ -66,14 +68,17 @@ class App extends Component {
         kohdet: snapshot.val(),
        
       });
+     
     });
+
+    this.setState({kohdet: this.renderKohdet()})
 
     let locations = [
       ["LOCATION_1",65.0121, 25.4651],
-  
       ["LOCATION_4",62.1763, 25.3532],
   
       ];
+      console.log(this.state)
           let marker=null;
           let map = L.map('map').setView([65.0121, 25.4651], 8);
           let mapLink = 
@@ -95,38 +100,35 @@ class App extends Component {
   
 
   renderKohdet(){
-   /*  database.on('value', snapshot => {
-      this.setState({ 
-        kohdet: snapshot.val(),
-       
-      });
-    }); */
     return _.map(this.state.kohdet, (value, key) => {
       return (
         <div key={key}>
           <h1>{value.name}</h1>
           <p>{value.address}</p>
         </div>
-
       );
     });
   }
 
-  onNameChange(e){
+  onNameChange(e){ 
     this.setState({name: e.target.value});
   }
 
   onAddressChange(e){
+    if(e.target.value.length >0 ){
     this.setState({address: e.target.value});
      provider.search({ query: e.target.value })
      .then(res => {
+       if(res.length>0) {
+        this.setState({
+          setLongitude: res[0].x,
+          setLatitude: res[0].y
+        })
+       }
        
-       
-       this.setState({
-        setLongitude: res[0].x,
-        setLatitude: res[0].y
-      })
+      
      })
+    } 
      
     //console.log('this is result - ', result);
 
@@ -136,7 +138,9 @@ class App extends Component {
     e.preventDefault();
     const kohde = {
       name: this.state.name,
-      address: this.state.address
+      address: this.state.address,
+      setLatitude:this.state.setLatitude,
+      setLongitude: this.state.setLongitude
     }
 
     database.push(kohde);
@@ -216,12 +220,15 @@ class App extends Component {
                 value={this.state.address}
                 onChange={this.onAddressChange}
                 />
+                <input type="hidden" name="longtitude" value={this.state.setLongitude.substring(0, 7)}/>
+               <input type="hidden" name="latitude" value={this.state.setLatitude.substring(0, 7)}/>
                
                <input type="submit" value="Search"/>
+               
               </form>
               <br/>
-              <p>{this.state.setLongitude} - Longitude</p>
-              <p>{this.state.setLatitude} - Latitude</p>
+              <p>{this.state.setLongitude.substring(0, 7)} - Longitude</p>
+              <p>{this.state.setLatitude.substring(0, 7)} - Latitude</p>
               <hr />
               {this.renderKohdet()}
             </div>
