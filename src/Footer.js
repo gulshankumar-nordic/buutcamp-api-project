@@ -9,10 +9,10 @@ class Footer extends Component {
         return ( 
             <div>
                 <footer>
-                 <div class="footer-copyright text-center">© 2018 Copyright - 
-      <a href="https://www.netwink.fi">Gulshan Kumar</a>
-    </div>
-  </footer>
+                    <div className="footer-copyright text-center">© 2018 Copyright - 
+                        <a href="http://www.netwink.fi">Gulshan Kumar</a>
+                    </div>
+                </footer>
             </div>
          );
     }
