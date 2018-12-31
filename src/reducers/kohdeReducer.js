@@ -1,11 +1,14 @@
-import { GET_KOHDET } from '../actions/actionTypes';
+import { GET_KOHDET, GET_LOCATIONS } from '../actions/actionTypes';
 
 export default function(state={}, action){
     switch(action.type){
         case GET_KOHDET:
             return action.payload;
-        
-            default:
-                return state;
+            
+        case GET_LOCATIONS:
+            return action.payload;
+
+        default:
+            return state;
     }
 }
