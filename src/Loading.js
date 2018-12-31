@@ -27,7 +27,7 @@ class Loading extends Component {
             return <div>{children}</div>
         }
         else {
-            return <div><h3 style={{color:'green'}}>Loaidng...</h3></div>
+            return <div><h3 style={{color:'green'}}>Loading...</h3></div>
         }
       
     }
